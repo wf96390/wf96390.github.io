@@ -1,0 +1,70 @@
+---
+layout:     post
+title:      iOS中显示WEBP动态图像
+author:     慢慢
+tags: 		Webp iOS
+subtitle:  	
+category:  blog
+---
+<!-- Start Writing Below in Markdown -->
+
+# 下载webp支持包
+google官网中 webp下载地址
+https://developers.google.com/speed/webp/download
+
+其中包括iOS的SDK，可以直接下载使用，也可以参照下面的方法
+http://blog.csdn.net/chsadin/article/details/42917271
+在客户端中使用 framework 进行导入
+
+iOS-WebP中增加了Category来解析webp图片 http://seanooi.github.io/iOS-WebP/
+但是只支持静态的 webp 显示，如果需要显示动态的 webp 图片，则需要对每一帧进行解析，再展示每帧动画
+解析动态图片可以按照 YYKit 中的方法 https://github.com/ibireme/YYKit
+
+# YYKit
+使用到的主要的类
+**YYImageCoder**（图片解码，包括所有的图片类型）
+里面包括帧信息 YYImageFrame ，YYImageDecoder 解码 和 YYImageEncoder 编码等操作
+
+**YYImage**（包括的所有的图片类型）
+UIImage 的子类，增加了很多属性比如 coder，初始化方法同 UIImage 一样
+
+**YYAnimatedImageView**（展示动态图片的View）
+UIImageView 的子类，用于播放 webp 动画
+
+UIImageView 并不支持播放 gif 以及 webp 的动图，但是提供了展示动态图片的方法
+
+属性
+
+```
+property (nullable, nonatomic, copy) NSArray<UIImage *> *animationImages; // The array must contain UIImages. Setting hides the single image. default is nil
+@property (nullable, nonatomic, copy) NSArray<UIImage *> *highlightedAnimationImages NS_AVAILABLE_IOS(3_0); // The array must contain UIImages. Setting hides the single image. default is nil
+
+@property (nonatomic) NSTimeInterval animationDuration;         // for one cycle of images. default is number of images * 1/30th of a second (i.e. 30 fps)
+@property (nonatomic) NSInteger      animationRepeatCount;      // 0 means infinite (default is 0)
+```
+
+以及方法
+
+```
+- (void)startAnimating;
+- (void)stopAnimating;
+- (BOOL)isAnimating;
+```
+
+# Runloop
+最后不得不提一下 YYAnimatedImageView 的一个属性 runloopMode ，即设置 runloop 的 mode
+The animation timer's runloop mode, default is `NSRunLoopCommonModes`. Set this property to `NSDefaultRunLoopMode` will make the animation pause during UIScrollView scrolling.
+设置 NSDefaultRunLoopMode 时，滚动屏幕的时候暂停动画
+设置 NSRunLoopCommonModes 仍播放动画
+
+需要了解 RunLoop 的 mode 才能解释这个问题
+RunLoop只能运行在一种mode下，如果要换mode当前的loop也需要停下重启成新的。利用这个机制，ScrollView过程中NSDefaultRunLoopMode的mode会切换UITrackingRunLoopMode来保证ScrollView的流畅滑动不受只能在NSDefaultRunLoopMode时处理的事件影响滑动。同时mode还是可定制的。
+
+NSDefaultRunLoopMode：默认，空闲状态
+UITrackingRunLoopMode：ScrollView滑动时
+UIInitializationRunLoopMode：启动时
+NSRunLoopCommonModes：Mode集合 Timer计时会被scrollView的滑动影响的问题可以通过将timer添加到NSRunLoopCommonModes来解决。
+
+参考：http://www.starming.com/index.php?v=index&view=74
+
+
