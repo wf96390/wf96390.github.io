@@ -1,9 +1,9 @@
-﻿---
+---
 layout:     post
 title:      iOS使用setting bundle
 author:     慢慢
-tags: 		iOS settingbundle
-subtitle:  	iOS使用setting bundle
+tags: 		settingbundle iOS
+subtitle:  	
 category:  blog
 ---
 <!-- Start Writing Below in Markdown -->

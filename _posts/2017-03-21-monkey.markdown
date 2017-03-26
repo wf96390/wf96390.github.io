@@ -1,0 +1,43 @@
+---
+layout:     post
+title:      iOS客户端monkey测试
+author:     慢慢
+tags: 		monkey iOS
+subtitle:  	
+category:  blog
+---
+<!-- Start Writing Below in Markdown -->
+
+# 简介
+monkey测试指的是，app根据系统随机产生操作指令，进行各种随机的操作，测试执行一段时间后，观察app是否有crash或者异常日志。
+在monkey中主要是模拟用户点击、滑动、长按、返回这几种常用的操作。
+
+# 实现方式
+实现思路有两种：
+1.用js脚本在instrument中控制app的点击行为。可以参考 https://my.oschina.net/bluedreamjn/blog/536049
+在Xcode7里测试可以运行，测试代码会逐个点击tableview的每个cell并返回。
+优势是可以独立于代码，随时修改。劣势是需要instrument才能运行。
+有很多其他人实现的Monkey框架：
+https://github.com/vigossjjj/CrashMonkey4IOS
+试了一下，有问题 https://github.com/vigossjjj/CrashMonkey4IOS/issues/79
+原因是Xcode8中没有Automation
+![这里写图片描述](https://wf96390.github.io/img/monkey/1.png)
+
+2.利用Xcode的UI Test完成自动化测试。参考 http://www.jianshu.com/p/6cb686e5dacc
+使用XCTest.framework或者使用第三方库KIF框架的点击效果，实现一套随机点击的逻辑。
+优势可以集成在app中随时生效，劣势是需要在代码中集成monkey代码。
+
+除了在Xcode中运行测试，也可以配置Jekins自动执行
+在工程目录下运行xcodebuild，如果有多个项目的话，需要指定project和target
+xcodebuild [-project projectname] [-target targetname ...] [-configuration configurationname]
+            [-sdk [sdkfullpath | sdkname]] [buildaction ...] [setting=value ...]
+            [-userdefault=value ...]
+
+例如：
+xcodebuild test -destination-timeout 900 -workspace Demo.xcworkspace -scheme Demo -sdk iphonesimulator -configuration Debug -destination platform='iOS Simulator',name='iPhone 6 Plus'
+
+# 遇到的问题
+1、在monkey测试的时候经常出现无法退出当前页面。
+解决方案：因为返回按钮都在左上角，所以可以增加左上角的点击权重，防止无法返回的情况。
+2、偶尔会出现跳到第三方app的情况。
+解决方案：由于跳到其他app无法控制跳回来，所以测试代码禁用了openURL的方法。
