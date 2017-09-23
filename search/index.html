@@ -21,18 +21,18 @@ description: Search by keyword or tag.
 {% assign tags_list = site.tags %}  
   {% if tags_list.first[0] == null %}
     {% for tag in tags_list %} 
-      <a href="#{{ tag }}">{{ tag | capitalize }} <span>{{ site.tags[tag].size }}</span></a>
+      <a href="#{{ tag }}">{{ tag | none }} <span>{{ site.tags[tag].size }}</span></a>
     {% endfor %}
   {% else %}
     {% for tag in tags_list %} 
-      <a href="#{{ tag[0] }}">{{ tag[0] | capitalize }} <span>{{ tag[1].size }}</span></a>
+      <a href="#{{ tag[0] }}">{{ tag[0] | none }} <span>{{ tag[1].size }}</span></a>
     {% endfor %}
   {% endif %}
 {% assign tags_list = nil %}
 </div></ul>
 
 {% for tag in site.tags %} 
-  <h2 id="{{ tag[0] }}">{{ tag[0] | capitalize }}</h2>
+  <h2 id="{{ tag[0] }}">{{ tag[0] | none }}</h2>
   <ul class="post-list">
     {% assign pages_list = tag[1] %}  
     {% for post in pages_list %}
