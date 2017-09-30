@@ -1,12 +1,12 @@
 ---
-layout: post
-date: 2017-09-21 23:24:54 +0800
-comments: true
-categories: issues
-author: 慢慢
-title: "reactnative native invoke"
-keywords: 
+layout:     post
+title:      React Native和iOS原生方法交互
+author:     慢慢
+tags: 		ReactNative iOS
+subtitle:  	
+category:  blog
 ---
+
 
 
 # 原生传递参数给React Native
@@ -38,7 +38,7 @@ keywords:
 > 传递的参数为OC的字典类型，在js中可以通过属性值.props访问字典的key，就可以取到参数值
 
 # React Native执行原生方法
-## 调用Native方法
+
 Native端：
 
 1. 首先需要调用的原生方法需要实现 `RCTBridgeModule` 协议
@@ -84,5 +84,35 @@ render() {
 
 > 如果需要Natvie方法回调，需要将导出的方法增加`RCTResponseSenderBlock`类型的参数，该参数则为方法的回调方法
 
+# 原生调用React Native方法
+
+之前可以使用`sendAppEventWithName:body:`方法，但是已经废弃了。在0.28版本之后，iOS 向 JS 端发射消息的代码如下。 
+
+1. 自定义的模块类头文件要继承自`RCTEventEmitter`。(因为 React 需要调用该类，所以也需要实现 `RCTBridgeModule` 协议)
+2. 在 Native 方法中发送消息
+
+	```
+	[self sendEventWithName:@"MessageName"
+	                   body:params];
+	```
+3. 在 React 方法中监听消息（需要在 `componentWillUnmount` 中移除监听）
+
+```
+var nativeBridge = NativeModules.YourClassName;// 你的类名
+const nativeModule = new NativeEventEmitter(nativeBridge);
+...
+
+componentDidMount(){
+	nativeModule.addListener('MessageName',(data)=>this._method(data));
+}
+
+```
 
 
+简单的Demo：https://github.com/wf96390/YFReactNativeDemo
+
+
+参考：
+
+http://www.cnblogs.com/wujy/p/5864591.html
+http://blog.csdn.net/xiangzhihong8/article/details/75092576
