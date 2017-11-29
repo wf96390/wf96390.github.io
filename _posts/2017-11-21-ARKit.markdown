@@ -1,0 +1,57 @@
+---
+layout:     post
+title:      ARKit学习以及创建简单AR程序
+author:     慢慢
+tags: 		ARKit iOS 增强现实
+subtitle:  	
+category:  blog
+---
+
+
+# AR简介
+先讲述一下什么是AR，AR指的是增强现实，什么是增强现实，百度百科上给的概念: 是一种实时地计算摄影机影像的位置及角度并加上相应图像、视频、3D模型的技术，这种技术的目标是在屏幕上把虚拟世界套在现实世界并进行互动。
+说白了就是在现实世界的基础上增加一些虚拟场景的技术，例如去年特别火的游戏Pokémon GO，就是在现实世界中展现虚拟的宠物小精灵进行捕捉，还有支付宝后来推出的AR红包的功能，也是这样。
+AR和VR虚拟现实的区别在于，VR中看到的场景都是虚拟的，而AR是将虚拟的场景和现实相结合。
+
+# ARKit简介
+ARKit是苹果一系列软件开发工具的名称，使开发者能为iOS设备开发增强现实应用。当iOS 11发布后，大多数用户不会真正使用ARKit，但会看到它的成果，与利用它开发的应用交互。
+
+ARKit详细介绍可以看苹果官方的文档
+https://developer.apple.com/documentation/arkit
+
+## 谁能使用ARKit应用？
+配置苹果A9或A10芯片的iOS设备用户都可以使用ARKit应用，其中包括iPhone 6s、6s Plus、iPhone 7、iPhone 7 Plus、所有型号iPad Pro和2017年发布的9.7英寸iPad等。
+如果想尝试一下，可以下载苹果的demo
+https://developer.apple.com/sample-code/wwdc/2017/PlacingObjects.zip
+## Android手机提供相似的技术吗？
+谷歌刚刚公布了ARCore软件开发工具包——与ARKit相似，能为Android手机增添增强现实功能。最初，ARCore应用只能在三星Galaxy S8和谷歌Pixel上运行，今年冬季将入驻数以百万计、运行Android 7.0 Nougat及以上版本的设备。
+
+ARKit详细介绍
+http://www.jianshu.com/p/d7dcf46f3705
+
+
+#如何创建ARKit程序
+1、首先，创建一个AR的项目
+![这里写图片描述](https://wf96390.github.io/img/arkit/1.png)
+
+2、选择默认选项
+![这里写图片描述](https://wf96390.github.io/img/arkit/2.png)
+Scenekit： 基于3D场景
+SpriteKit：基于2D场景
+Metal：Apple iOS8推出的图形API
+
+3、运行项目，你就可以看到苹果官方提供的模型，另外你也可以准备自己的模型，推荐使用dae格式文件
+![这里写图片描述](https://wf96390.github.io/img/arkit/3.png)
+替换苹果官方提供的模型，就可以展示其他3D模型
+
+
+一些好玩的AR程序
+https://github.com/olucurious/Awesome-ARKit github上有整理，包括比较开源项目以及AppStore上的应用
+
+Demo地址：
+https://github.com/wf96390/ARDemo
+
+![这里写图片描述](https://wf96390.github.io/img/arkit/4.jpg)
+
+
+
